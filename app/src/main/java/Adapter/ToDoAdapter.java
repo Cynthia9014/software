@@ -24,7 +24,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private List<ToDoModel> todoList;
     private MainActivity activity;
     private DatabaseHandler db;
-    private Object AddNewTask;
+
 
 
     public ToDoAdapter(DatabaseHandler db, MainActivity activity){
@@ -71,10 +71,16 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
 
     public Context getContext(){
         return activity;
-
     }
 
-    private void editItem(int position{
+    public void deleteItem(int position){
+        ToDoModel item = todoList.get(position);
+        db.deleteTask(item.getId());
+        todoList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public <AddNewTask> void editItem(int position){
         ToDoModel item =todoList.get(position);
         Bundle bundle = new Bundle();
         bundle.putInt("id", item.getId());
@@ -82,7 +88,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         AddNewTask fragment = new AddNewTask();
         fragment.setArguments(bundle);
         fragment.show(activity.getSupportFragmentManager(), AddNewTask.TAG);
-    })
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         CheckBox task;
